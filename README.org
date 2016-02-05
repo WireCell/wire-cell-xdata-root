@@ -1,0 +1,27 @@
+#+TITLE: Wire Cell Exchange Data in ROOT format
+
+This package provides data structures for exchanging data in ROOT format between Wire Cell and other systems.
+
+This package is independent from Wire Cell Toolkit (and Prototype).
+
+* Identifiers
+
+Identifiers (variables ending in =id=) are:
+
+- unsigned,
+- unique within the implicit context of the data,
+- take value of zero to indicate "undefined",
+- and otherwise take values which are application-dependent.
+
+* Coordinate system
+
+The coordinate system is application-dependent.
+
+* Classes
+
+The classes in this package are meant to describe information about wire-cell type imaging and reconstruction.  
+They are designed to preserve associations given ROOT I/O limitations.  
+The design is not intended to be used directly for interactive analysis (ie, =tree->Draw(...)=).
+
+See the comments in the header files for details of how they should be interpreted.
+
