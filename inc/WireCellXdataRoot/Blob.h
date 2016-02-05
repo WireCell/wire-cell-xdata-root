@@ -11,8 +11,11 @@ namespace WireCellXdataRoot {
     struct Blob {
 	Blob();
 
-	/// Indices into cell collection for constituent cells.
-	std::vector<uint32_t> cellind;
+	/// True if indices reference primitive cells instead of other blobs.
+	bool iscells;
+
+	/// Indices into cell or blob collection.
+	std::vector<std::size_t> index;
     };
 
 }

@@ -2,7 +2,7 @@
 #define WIRECELLXDATAROOT_FIELD
 
 #include <vector>
-
+#include <string>
 
 namespace WireCellXdataRoot {
 
@@ -15,7 +15,14 @@ namespace WireCellXdataRoot {
 	std::vector<float> value;
     };
 
-    typedef std::vector<FieldPoint> Field;
+    /** A field is a collection of field points with an associated name.
+     */
+    struct Field {
+	Field(const std::string& name = "");
+
+	std::string name;
+	std::vector<FieldPoint> value;
+    };
 }
 
 #endif

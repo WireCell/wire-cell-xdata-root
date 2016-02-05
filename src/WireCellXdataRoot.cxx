@@ -8,6 +8,8 @@
 #include "WireCellXdataRoot/Blotch.h"
 #include "WireCellXdataRoot/Field.h"
 #include "WireCellXdataRoot/Locus.h"
+#include "WireCellXdataRoot/Frame.h"
+#include "WireCellXdataRoot/RunInfo.h"
 
 using namespace WireCellXdataRoot;
 
@@ -22,6 +24,12 @@ Wire::Wire()
     ,  point1()
     , point2()
 {
+}
+
+WireSet& WireSet::operator=(const WireSet& other)
+{
+    wire = other.wire;
+    return *this;
 }
 
 Point::Point()
@@ -57,14 +65,15 @@ Cell::Cell(uint32_t uind, uint32_t vind, uint32_t wind)
 }
 
 Blob::Blob()
-    : cellind()
+    : iscells(true)
+    , index()
 {
 }
 
 
 Blotch::Blotch()
     : slice(-1)
-    , cellind()
+    , blobind()
     , value()
 {
 }
@@ -97,4 +106,39 @@ FieldPoint::FieldPoint(const Point& point, const std::vector<float>& value)
     : point(point)
     , value(value)
 {
+}
+
+Field::Field(const std::string& name) : name(name), value() {}
+
+
+
+Frame::Frame(int ident)
+    : ident(ident)
+    , cells()
+    , blobs()
+    , blotches()
+    , fields()
+{
+}
+
+Frame& Frame::operator=(const Frame& other)
+{
+    ident = other.ident;
+    cells = other.cells;
+    blobs = other.blobs;
+    blotches = other.blotches;
+    fields = other.fields;
+    return *this;
+}
+
+RunInfo::RunInfo(int ident, const std::string& detector)
+    : detector(detector), ident(ident)
+{
+}
+
+RunInfo& RunInfo::operator=(const RunInfo& other)
+{
+    detector = other.detector;
+    ident = other.ident;
+    return *this;
 }

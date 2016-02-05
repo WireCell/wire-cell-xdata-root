@@ -13,9 +13,11 @@ APPNAME = 'WireCellXdataRoot'
 
 def options(opt):
     opt.load('smplpkgs')
+    opt.load('rootsys')
 
 def configure(cfg):
     cfg.load('smplpkgs')
+    cfg.load('rootsys')
     cfg.check_cxx(header_name="Rtypes.h", use='ROOTSYS',
                   mandatory=True)
 def build(bld):

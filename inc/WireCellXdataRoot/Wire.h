@@ -4,6 +4,7 @@
 #include "WireCellXdataRoot/Point.h"
 
 #include <cstdint>
+#include <vector>
 
 
 namespace WireCellXdataRoot {
@@ -51,6 +52,12 @@ namespace WireCellXdataRoot {
 	/// system associated with the APA.
 	Point point2;
 
+    };
+
+    struct WireSet {
+	std::vector<Wire> wire;
+
+	WireSet& operator=(const WireSet& other);
     };
 
 }

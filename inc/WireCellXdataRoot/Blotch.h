@@ -14,8 +14,8 @@ namespace WireCellXdataRoot {
 	/// The time slice associated with the deposition.
 	int slice;
 
-	/// Indices into cell or blob collection.
-	std::vector<uint32_t> cellind;
+	/// Indices into a blob collection.
+	std::vector<std::size_t> blobind;
 
 	/// The values which apply to the blotch.
 	std::vector<float> value;
