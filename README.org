@@ -48,3 +48,40 @@ The Image data is dynamic in the sense that it spans a "frame" of readout.  It m
 - =Blob= :: an association between a collection of cells, a time slice and some numeric values (eg, charge)
 
 - =Field= :: a collection of =FieldPoint= objects each of which associate a vector of numbers and a 3D point.  Fields have human readable names.
+
+* Status
+
+This section holds some transient status info.
+
+** Conversion of shower3D
+
+The prototype produces a "shower3D" file which should be considered internal and not proliferated.  Its conversion to Wire Cell Xdata ROOT is used as an initial test.  That file contains simple dumps of transient objects that are not well suited to saving directly to ROOT.  This leads to both time and space bloat:
+
+#+BEGIN_EXAMPLE
+$ ./build/2dtoy/2dtoy-shower3d-xdata ../shower3D_cluster_22_4.root ../foo.root
+Loading 467373 entries of TC
+Loading 52415 entries of T_true
+Loading 587542 entries of T_rec
+Loading 405447 entries of T_rec_charge
+shower3d read time: 5.80891s
+xdata packing time: 4.5058s
+Writing xdata:
+	4487 wires
+	3734 cells
+	16567 blobs
+	3 fields
+Write xdata in 0.77918s
+Test readback:
+... in 0.438089s
+
+$ ls -lh ../*.root
+-rw-r--r-- 1 bv bv 6.6M Feb  7 13:00 ../foo.root
+-rw-rw-r-- 1 bv bv  38M Feb  5 08:45 ../shower3D_cluster_22_4.root
+#+END_EXAMPLE
+
+** Work to do
+
+- [ ] validate shower3D conversion
+- [ ] include celltree level information
+- [ ] produce Xdata to Bee conversion
+- [ ] add reader/writer nodes to the Wire Cell Toolkit
