@@ -26,7 +26,7 @@ namespace WireCellXdataRoot {
 	/// Identifier for the volume in which the wire resides.  The
 	/// coordinate system of any 3D points related to wire
 	/// locations is defined w.r.t. to the volume.
-	uint16_t volid;
+	uint32_t volid;
 
 	/// The plane in the APA in which the wire resides. 
 	int8_t plane;
@@ -52,12 +52,6 @@ namespace WireCellXdataRoot {
 	/// system associated with the APA.
 	Point point2;
 
-    };
-
-    struct WireSet {
-	std::vector<Wire> wire;
-
-	WireSet& operator=(const WireSet& other);
     };
 
 }

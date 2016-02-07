@@ -2,45 +2,35 @@
 #define WIRECELLXDATAROOT_XDATAFILE
 
 #include "WireCellXdataRoot/RunInfo.h"
-#include "WireCellXdataRoot/Wire.h"
-#include "WireCellXdataRoot/Frame.h"
+#include "WireCellXdataRoot/Geom.h"
+#include "WireCellXdataRoot/Image.h"
 
 
 #include <string>
 #include <vector>
 
-class TFile;
-
 namespace WireCellXdataRoot {
 
     class XdataFile {
-	TFile* m_tfile;
-	Frame* m_frame;
-	RunInfo* m_ri;
-	WireSet* m_ws;
+
+	std::string m_treename;
+	Image* m_image;
+	RunInfo* m_runinfo;
+	Geom* m_geom;
+
     public:
-	XdataFile(const std::string& url,
-		  const std::string& mode = "r");
+
+	XdataFile(const std::string& treename = "xdata");
 	~XdataFile();
 
-	/// Save run info.  Return number of bytes written. 
-	std::size_t write(const RunInfo& ri);
-	/// Read run info, filling ri.
-	std::size_t read(RunInfo& ri);
+	std::size_t read(const std::string& url);
+	std::size_t write(const std::string& filename);
 
-	/// Save wire set.  Return number of bytes written. 
-	std::size_t write(const WireSet& ws);
-	/// Read wire set, filling ws.
-	std::size_t read(WireSet& ws);
+	/// Access data for reading or writing
+	RunInfo& runinfo();
+	Geom& geom();
+	Image& image();
 
-	/// Append one frame.  Return entry number written. 
-	std::size_t append(const Frame& frame);
-	/// Return total number of frames
-	std::size_t frames();
-	/// Get the n'th frame
-	std::size_t read(Frame& frame, std::size_t entry);
-
-	// etc for sim
     };
 
 }

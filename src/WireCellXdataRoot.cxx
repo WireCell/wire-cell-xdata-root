@@ -3,14 +3,18 @@
 
 #include "WireCellXdataRoot/Point.h"
 #include "WireCellXdataRoot/Wire.h"
+#include "WireCellXdataRoot/Geom.h"
 #include "WireCellXdataRoot/Cell.h"
 #include "WireCellXdataRoot/Blob.h"
 #include "WireCellXdataRoot/Blotch.h"
 #include "WireCellXdataRoot/Field.h"
 #include "WireCellXdataRoot/Locus.h"
-#include "WireCellXdataRoot/Frame.h"
+#include "WireCellXdataRoot/Image.h"
 #include "WireCellXdataRoot/RunInfo.h"
+#include "WireCellXdataRoot/Image.h"
 
+#include <iostream>
+using namespace std;
 using namespace WireCellXdataRoot;
 
 Wire::Wire()
@@ -26,11 +30,47 @@ Wire::Wire()
 {
 }
 
-WireSet& WireSet::operator=(const WireSet& other)
+Image::Image(uint64_t ident,
+	     uint64_t second, uint32_t nanosecond,
+	     double slicespan, double toffset)
+    : ident(ident)
+    , second(second)
+    , nanosecond(nanosecond)
+    , slicespan(slicespan)
+    , toffset(toffset)
+    , cells()
+    , blobs()
+    , blotches()
+    , fields()
 {
-    wire = other.wire;
-    return *this;
 }
+Image::~Image()
+{
+    for (auto c : cells) {
+	delete c;
+    }
+    for (auto b : blobs) {
+	delete b;
+    }
+    for (auto b : blotches) {
+	delete b;
+    }
+    for (auto f : fields) {
+	delete f;
+    }
+}
+
+Geom::Geom()
+    : wires()
+{
+}
+Geom::~Geom()
+{
+    for (auto w : wires) {
+	delete w;
+    }
+}
+
 
 Point::Point()
     : x(0)
@@ -47,16 +87,18 @@ Point::Point(float x, float y, float z)
 }
 
 Cell::Cell() 
-    : uind(0)
-    ,vind(0)
-    ,wind(0)
-    ,area(-1)
-    ,center()
+    : ident(0)
+    , uind(0)
+    , vind(0)
+    , wind(0)
+    , area(-1)
+    , center()
 {
 }
 
-Cell::Cell(uint32_t uind, uint32_t vind, uint32_t wind)
-    : uind(uind)
+Cell::Cell(uint64_t ident, uint32_t uind, uint32_t vind, uint32_t wind)
+    : ident(ident)
+    , uind(uind)
     , vind(vind)
     , wind(wind)
     , area(-1)
@@ -112,33 +154,8 @@ Field::Field(const std::string& name) : name(name), value() {}
 
 
 
-Frame::Frame(int ident)
-    : ident(ident)
-    , cells()
-    , blobs()
-    , blotches()
-    , fields()
-{
-}
 
-Frame& Frame::operator=(const Frame& other)
-{
-    ident = other.ident;
-    cells = other.cells;
-    blobs = other.blobs;
-    blotches = other.blotches;
-    fields = other.fields;
-    return *this;
-}
-
-RunInfo::RunInfo(int ident, const std::string& detector)
+RunInfo::RunInfo(uint64_t ident, const std::string& detector)
     : detector(detector), ident(ident)
 {
-}
-
-RunInfo& RunInfo::operator=(const RunInfo& other)
-{
-    detector = other.detector;
-    ident = other.ident;
-    return *this;
 }

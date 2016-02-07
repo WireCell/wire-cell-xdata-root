@@ -8,108 +8,73 @@
 using namespace std;
 using namespace WireCellXdataRoot;
 
-XdataFile::XdataFile(const std::string& url,
-		     const std::string& mode)
-    : m_tfile(0)
-    , m_frame(0)
-    , m_ri(0)
-    , m_ws(0)
+XdataFile::XdataFile(const std::string& treename)
+    : m_treename(treename)
+    , m_image(new Image)
+    , m_runinfo(new RunInfo)
+    , m_geom(new Geom)
 {
-    if (mode[0] == 'r') {
-	//cerr << "XdataFile opening readonly: " << url << endl;
-	m_tfile = TFile::Open(url.c_str(), "READ");
-    }
-    else {
-	//cerr << "XdataFile opening recreate: " << url << endl;
-	m_tfile = TFile::Open(url.c_str(), "RECREATE");
-    }
 }
 
 XdataFile::~XdataFile()
 {
-    if (!m_tfile) return;
-    //cerr << "XdataFile closing: " << m_tfile->GetOption() << " " << m_tfile->GetName() << endl;
-    if (m_tfile->GetOption() == std::string("READ")) {
-    }
-    else {
-	m_tfile->Write("image");
-    }
-    m_tfile->Close();
-    delete m_tfile;
-    m_tfile = nullptr;
+    delete m_geom; m_geom = 0;
+    delete m_runinfo; m_runinfo = 0;
+    delete m_image; m_image = 0;
 }
 
-std::size_t XdataFile::read(RunInfo& ri)
-{
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("run"));
-    RunInfo* ptr = &ri;
-    auto what = tree->SetBranchAddress("info", &ptr);
-    if (what < 0) { return 0; }
-    return tree->GetEntry(0);
-}
+RunInfo& XdataFile::runinfo() { return *m_runinfo; }
+Geom& XdataFile::geom() { return *m_geom; }
+Image& XdataFile::image() { return *m_image; }
 
-std::size_t XdataFile::write(const RunInfo& ri)
+size_t XdataFile::read(const std::string& url)
 {
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("run"));
+    TFile* tfile = TFile::Open(url.c_str(), "READ");
+    TTree* tree = dynamic_cast<TTree*>(tfile->Get(m_treename.c_str()));
     if (!tree) {
-	tree = new TTree("run", "Wire Cell Exchange Data RunInfo");
-	//tree->SetDirectory(m_tfile); // needed if multiple files open?
-	tree->Branch("info", &m_ri);
+	string msg = "Unable to get '" + m_treename + "' tree from " + url;
+	throw runtime_error(msg.c_str());
     }
-    (*m_ri) = ri;
-    auto siz = tree->Fill();
-    //tree->Write("", TObject::kOverwrite);
-    return siz;
-}
 
-std::size_t XdataFile::read(WireSet& ws)
-{
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("geom"));
-    WireSet* ptr = &ws;
-    tree->SetBranchAddress("wireset", &ptr);
-    return tree->GetEntry(0);
-}
-
-std::size_t XdataFile::write(const WireSet& ws)
-{
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("geom"));
-    if (!tree) {
-	tree = new TTree("geom", "Wire Cell Exchange Data Geometry");
-	//tree->SetDirectory(m_tfile); // needed if multiple files open?
-	tree->Branch("wireset", &m_ws);
+    int what = tree->SetBranchAddress("runinfo", &m_runinfo);
+    if (what < 0) {
+	string msg = "Unable to set branch 'runinfo' in '" + m_treename + "' tree from " + url;
+	throw runtime_error(msg.c_str());
     }
-    (*m_ws) = ws;
-    auto siz = tree->Fill();
-    //tree->Write("", TObject::kOverwrite);
-    return siz;
-}
 
-std::size_t XdataFile::append(const Frame& frame)
-{
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("image"));
-    if (!tree) {
-	tree = new TTree("image", "Wire Cell Exchange Data Imaging");
-	//tree->SetDirectory(m_tfile); // needed if multiple files open?
-	tree->Branch("frame", &m_frame);
+    what = tree->SetBranchAddress("geom", &m_geom);
+    if (what < 0) {
+	string msg = "Unable to set branch 'geom' in '" + m_treename + "' tree from " + url;
+	throw runtime_error(msg.c_str());
     }
-    auto entry = tree->GetEntries();
-    (*m_frame) = frame;
-    tree->Fill();
-    return entry;
+
+    what = tree->SetBranchAddress("image", &m_image);
+    if (what < 0) {
+	string msg = "Unable to set branch 'image' in '" + m_treename + "' tree from " + url;
+	throw runtime_error(msg.c_str());
+    }
+
+    size_t ret = tree->GetEntry(0);
+
+    tfile->Close();
+    delete tfile;
+    return ret;
 }
 
-std::size_t XdataFile::frames()
-{
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("image"));
-    if (!tree) { return 0; }
-    return tree->GetEntries();
+
+size_t XdataFile::write(const std::string& filename) {
+    TFile* tfile = TFile::Open(filename.c_str(), "RECREATE");
+
+    TTree* tree = new TTree(m_treename.c_str(), "Wire Cell Exchange Data Imaging");
+
+    tree->Branch("runinfo", &m_runinfo);
+    tree->Branch("geom", &m_geom);
+    tree->Branch("image", &m_image);
+
+    size_t ret = tree->Fill();
+    tree->Write("", TObject::kOverwrite);
+    tfile->Close();
+    delete tfile;
+    return ret;
 }
 
-std::size_t XdataFile::read(Frame& frame, std::size_t entry)
-{
-    TTree* tree = dynamic_cast<TTree*>(m_tfile->Get("image"));
-    if (!tree) { return 0; }
-    Frame* ptr = &frame;
-    tree->SetBranchAddress("frame", &ptr);
-    return tree->GetEntry(entry);
-}

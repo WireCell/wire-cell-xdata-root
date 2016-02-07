@@ -15,9 +15,9 @@ def test_write():
     print siz
 
     for number in range(1000):
-        f = wc.Frame(number)
-        siz = xf.append(f);
-        #print number, siz, f.ident
+        img = wc.Image(number)
+        xf.update(img)
+        xf.fill_frame()
 
 def test_read():
     xf = wc.XdataFile(url,'r')
@@ -26,9 +26,9 @@ def test_read():
     print siz, ri.ident, ri.detector
 
     nframes = xf.frames();
-    frame = wc.Frame()
+    image = wc.Image()
     for iframe in range(nframes):
-        xf.read(frame, iframe)
+        xf.read(image, iframe)
 
 if '__main__' == __name__:
     test_write()
