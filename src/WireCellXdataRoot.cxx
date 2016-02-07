@@ -3,6 +3,7 @@
 
 #include "WireCellXdataRoot/Point.h"
 #include "WireCellXdataRoot/Wire.h"
+#include "WireCellXdataRoot/Deco.h"
 #include "WireCellXdataRoot/Geom.h"
 #include "WireCellXdataRoot/Cell.h"
 #include "WireCellXdataRoot/Blob.h"
@@ -52,6 +53,14 @@ Point::Point(float x, float y, float z)
     , z(z) 
 {
 }
+
+Deco::Deco()
+    : wireind(0)
+    , slice(0)
+    , values()
+{
+}
+
 
 Cell::Cell() 
     : ident(0)

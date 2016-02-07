@@ -1,6 +1,7 @@
 #ifndef WIRECELLXDATAROOT_IMAGE
 #define WIRECELLXDATAROOT_IMAGE
 
+#include "WireCellXdataRoot/Deco.h"
 #include "WireCellXdataRoot/Cell.h"
 #include "WireCellXdataRoot/Blob.h"
 #include "WireCellXdataRoot/Field.h"
@@ -39,6 +40,15 @@ namespace WireCellXdataRoot {
 
 	/// Call before each fill.
 	void clear();
+
+	TClonesArray* decos;
+	/// Make and return a new deco allocated at end of array.
+	/// Index is set to its location.
+	Deco* new_deco(int& index);
+	/// Get deco at index
+	Deco* get_deco(int index);
+	/// get number of decos
+	int num_decos();
 
 	TClonesArray* cells;
 	/// Make and return a new cell allocated at end of array.

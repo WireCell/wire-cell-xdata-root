@@ -6,6 +6,7 @@
 #pragma link C++ class WireCellXdataRoot::Point;
 #pragma link C++ class WireCellXdataRoot::Wire;
 #pragma link C++ class WireCellXdataRoot::Geom;
+#pragma link C++ class WireCellXdataRoot::Deco;
 #pragma link C++ class WireCellXdataRoot::Cell;
 #pragma link C++ class WireCellXdataRoot::Blob;
 #pragma link C++ class WireCellXdataRoot::Locus;

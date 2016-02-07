@@ -9,6 +9,7 @@ Image::Image(uint64_t ident,
     , nanosecond(nanosecond)
     , slicespan(slicespan)
     , toffset(toffset)
+    , decos(new TClonesArray("WireCellXdataRoot::Deco"))
     , cells(new TClonesArray("WireCellXdataRoot::Cell"))
     , blobs(new TClonesArray("WireCellXdataRoot::Blob"))
     , fields(new TClonesArray("WireCellXdataRoot::Field"))
@@ -17,6 +18,7 @@ Image::Image(uint64_t ident,
 Image::~Image()
 {
     this->clear();
+    delete decos;
     delete cells;
     delete blobs;
     delete fields;
@@ -26,9 +28,26 @@ void Image::clear()
 {
     ident = second = nanosecond = 0;
     slicespan = toffset = 0;
+
+    // fixme: add test to see if I need to clear the individual objects in the arrays.
     cells->Clear();
     blobs->Clear();
     fields->Clear();
+}
+
+Deco* Image::new_deco(int& index)
+{
+    index = num_decos();
+    Deco* ret = (Deco*)decos->ConstructedAt(index);
+    ret->Clear();
+    return ret;
+}
+Deco* Image::get_deco(int index)
+{
+    return (Deco*)decos->At(index);
+}
+int Image::num_decos() {
+    return decos->GetEntriesFast(); 
 }
 
 Cell* Image::new_cell(int& index)
