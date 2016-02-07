@@ -12,12 +12,14 @@ This package uses a custom [[https://waf.io/][waf]] command called =wcb=.
   git clone https://github.com/WireCell/wire-cell-xdata-root.git
   # or git clone git@github.com:WireCell/wire-cell-xdata-root.git
   cd wire-cell-xdata-root/
-  ./waf --prefix=/path/to/install configure build install
+  ./wcb --prefix=/path/to/install configure build install
 #+END_SRC
 
 ** For Wire Cell Prototype
 
 To build the [[https://github.com/BNLIF/wire-cell][Wire Cell prototype]] against this package choose =--prefix= to be the same as used to build that package and it will pick it up.
+
+In the prototype, its use can be seen in the [[https://github.com/BNLIF/wire-cell-2dtoy/blob/master/apps/2dtoy-shower3d-xdata.cxx][2dtoy-shower3d-xdata]] app which can convert from an internal data format.
 
 ** For Wire Cell Toolkit
 
