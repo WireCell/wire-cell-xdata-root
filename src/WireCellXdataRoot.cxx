@@ -6,12 +6,9 @@
 #include "WireCellXdataRoot/Geom.h"
 #include "WireCellXdataRoot/Cell.h"
 #include "WireCellXdataRoot/Blob.h"
-#include "WireCellXdataRoot/Blotch.h"
 #include "WireCellXdataRoot/Field.h"
 #include "WireCellXdataRoot/Locus.h"
-#include "WireCellXdataRoot/Image.h"
 #include "WireCellXdataRoot/RunInfo.h"
-#include "WireCellXdataRoot/Image.h"
 
 #include <iostream>
 using namespace std;
@@ -28,36 +25,6 @@ Wire::Wire()
     ,  point1()
     , point2()
 {
-}
-
-Image::Image(uint64_t ident,
-	     uint64_t second, uint32_t nanosecond,
-	     double slicespan, double toffset)
-    : ident(ident)
-    , second(second)
-    , nanosecond(nanosecond)
-    , slicespan(slicespan)
-    , toffset(toffset)
-    , cells()
-    , blobs()
-    , blotches()
-    , fields()
-{
-}
-Image::~Image()
-{
-    for (auto c : cells) {
-	delete c;
-    }
-    for (auto b : blobs) {
-	delete b;
-    }
-    for (auto b : blotches) {
-	delete b;
-    }
-    for (auto f : fields) {
-	delete f;
-    }
 }
 
 Geom::Geom()
@@ -96,7 +63,7 @@ Cell::Cell()
 {
 }
 
-Cell::Cell(uint64_t ident, uint32_t uind, uint32_t vind, uint32_t wind)
+Cell::Cell(uint32_t ident, uint32_t uind, uint32_t vind, uint32_t wind)
     : ident(ident)
     , uind(uind)
     , vind(vind)
@@ -107,50 +74,49 @@ Cell::Cell(uint64_t ident, uint32_t uind, uint32_t vind, uint32_t wind)
 }
 
 Blob::Blob()
-    : iscells(true)
-    , index()
+    : slice(0)
+    , cellind()
+    , values()
 {
 }
 
 
-Blotch::Blotch()
-    : slice(-1)
-    , blobind()
-    , value()
-{
-}
 
 Locus::Locus()
     : name("")
-    , blotchind()
+    , blobind()
 {
 }
 
 Locus::Locus(const std::string& name)
     : name(name)
-    , blotchind()
+    , blobind()
 {
 }
 
 FieldPoint::FieldPoint()
     : point()
-    , value()
+    , values()
 {
 }
 	
 FieldPoint::FieldPoint(const Point& point)
     : point(point)
-    , value()
+    , values()
 {
 }
 	
 FieldPoint::FieldPoint(const Point& point, const std::vector<float>& value)
     : point(point)
-    , value(value)
+    , values(value)
 {
 }
 
-Field::Field(const std::string& name) : name(name), value() {}
+Field::Field(const std::string& name)
+    : name(name),
+      points()
+{
+}
 
 
 

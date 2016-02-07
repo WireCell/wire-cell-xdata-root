@@ -11,11 +11,10 @@ namespace WireCellXdataRoot {
      * as the "scene of an event".
      *
      * Here, a Locus is a region of 3D space defined as a collection
-     * of cells and possibly some associated values.  As there may be
-     * multiple ways to define a Locus on the same space, the
-     * association is make with weak references (to Blotches).
+     * of blobs. 
      *
-     * A Locus has a name to allow multiple Loci to exist in the same context.
+     * A Locus has a name to allow multiple Loci to exist in the same
+     * context.
      *
      * A Locus can be used to hold all blob-level charge (and
      * uncertainty) information in a readout window or multiple Loci
@@ -28,8 +27,8 @@ namespace WireCellXdataRoot {
 	/// some human-oriented identifier
 	std::string name;
 
-	/// Index into blotches array of associated blotches
-	std::vector<int> blotchind;
+	/// Index into array of associated blobs
+	std::vector<std::size_t> blobind;
     };
 
 }

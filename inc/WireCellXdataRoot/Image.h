@@ -3,8 +3,9 @@
 
 #include "WireCellXdataRoot/Cell.h"
 #include "WireCellXdataRoot/Blob.h"
-#include "WireCellXdataRoot/Blotch.h"
 #include "WireCellXdataRoot/Field.h"
+
+#include "TClonesArray.h"
 
 namespace WireCellXdataRoot {
 
@@ -21,10 +22,10 @@ namespace WireCellXdataRoot {
 	~Image();
 
 	/// An identifying number for this image.
-	uint64_t ident;
+	uint64_t ident;		// 64 bits for room to pack
 
 	/// The second in the Unix epoch in which the frame starts.
-	uint64_t second;
+	uint64_t second;	// force 64 bit time_t
 
 	/// The nanosecond in the second in which the frame starts.
 	uint32_t nanosecond;
@@ -36,17 +37,36 @@ namespace WireCellXdataRoot {
 	/// The span of one time slice in milliseconds
 	double slicespan;
 
-	/// All the primitive cells referenced elsewhere.
-	std::vector<Cell*> cells;
+	/// Call before each fill.
+	void clear();
 
-	/// Any organization of cells into blobs
-	std::vector<Blob*> blobs;
+	TClonesArray* cells;
+	/// Make and return a new cell allocated at end of array.
+	/// Index is set to its location.
+	Cell* new_cell(int& index);
+	/// Get cell at index
+	Cell* get_cell(int index);
+	/// get number of cells
+	int num_cells();
 
-	/// Associations between blobs and values 
-	std::vector<Blotch*> blotches;
+	TClonesArray* blobs;
+	/// Make and return a new blob allocated at end of array.
+	/// Index is set to its location.
+	Blob* new_blob(int& index);
+	/// Get cell at index
+	Blob* get_blob(int index);
+	/// get number of blobs
+	int num_blobs();
 
-	/// Associations between 3D points and values 
-	std::vector<Field*> fields;
+	TClonesArray* fields;
+	/// Make and return a new field allocated at end of array.
+	/// Index is set to its location.
+	Field* new_field(int& index);
+	/// Get cell at index
+	Field* get_field(int index);
+	/// get number of fields
+	int num_fields();
+
     };
 
 }

@@ -9,7 +9,6 @@
 #pragma link C++ class WireCellXdataRoot::Cell;
 #pragma link C++ class WireCellXdataRoot::Blob;
 #pragma link C++ class WireCellXdataRoot::Locus;
-#pragma link C++ class WireCellXdataRoot::Blotch;
 #pragma link C++ class WireCellXdataRoot::FieldPoint;
 #pragma link C++ class WireCellXdataRoot::Field;
 #pragma link C++ class WireCellXdataRoot::WireStore;

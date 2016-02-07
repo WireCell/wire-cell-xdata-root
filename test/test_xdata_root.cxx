@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <map>
 
 using namespace std;
 using namespace WireCellXdataRoot;
@@ -35,10 +36,19 @@ int main()
 
     Image& img = out.image();
     /// fill up some bogus cells
+    map<int,int> cell_id2ind;
     for (int uind = 0; uind<100; ++uind) {
 	for (int vind = 0; vind<100; ++vind) {
 	    for (int wind = 0; wind<100; ++wind) {
-		img.cells.push_back(new Cell(uind*10000 + vind*100 + wind,uind,vind,wind));
+		//img.cells.push_back(new Cell(uind*10000 + vind*100 + wind,uind,vind,wind));
+		int ident = uind*10000 + vind*100 + wind;
+		int ind = -1;
+		Cell* cell = img.new_cell(ind);
+		cell->ident = ident;
+		cell->uind = uind;
+		cell->vind = vind;
+		cell->wind = wind;
+		cell_id2ind[ident] = ind;
 	    }
 	}
     }

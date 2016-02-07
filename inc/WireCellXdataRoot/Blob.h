@@ -4,20 +4,28 @@
 #include <cstdint>
 #include <vector>
 
+#include "TObject.h"
 
 namespace WireCellXdataRoot {
 
-    /// The geometrical information about a "blob" or "merged cell"
-    struct Blob {
+    /// A collection of cells associated with a time slice and a number of values.
+    struct Blob : public TObject {
 	Blob();
 
-	/// True if indices reference primitive cells instead of other blobs.
-	bool iscells;
+	/// External, unique identifier.
+	uint32_t ident;
+
+	// the time slice
+	int slice;		
 
 	/// Indices into cell or blob collection.
-	std::vector<std::size_t> index;
-    };
+	std::vector<std::size_t> cellind;
 
+	/// Any values to associate to the blob
+	std::vector<float> values;
+
+	ClassDef(Blob, 1);
+    };
 }
 
 #endif
