@@ -4,24 +4,45 @@ This package provides data structures for exchanging data in ROOT format between
 
 This package is independent from Wire Cell Toolkit (and Prototype).
 
-* Identifiers
+* Install
 
-Identifiers (variables ending in =id=) are:
+This package uses a custom [[https://waf.io/][waf]] command called =wcb=.  
 
-- unsigned,
-- unique within the implicit context of the data,
-- take value of zero to indicate "undefined",
-- and otherwise take values which are application-dependent.
+#+BEGIN_SRC sh
+  git clone https://github.com/WireCell/wire-cell-xdata-root.git
+  # or git clone git@github.com:WireCell/wire-cell-xdata-root.git
+  cd wire-cell-xdata-root/
+  ./waf --prefix=/path/to/install configure build install
+#+END_SRC
 
-* Coordinate system
+** For Wire Cell Prototype
 
-The coordinate system is application-dependent.
+To build the [[https://github.com/BNLIF/wire-cell][Wire Cell prototype]] against this package choose =--prefix= to be the same as used to build that package and it will pick it up.
 
-* Classes
+** For Wire Cell Toolkit
 
-The classes in this package are meant to describe information about wire-cell type imaging and reconstruction.  
-They are designed to preserve associations given ROOT I/O limitations.  
-The design is not intended to be used directly for interactive analysis (ie, =tree->Draw(...)=).
+t.b.d.
 
-See the comments in the header files for details of how they should be interpreted.
+* Overview of data
 
+Top level object is =XdataFile= which helps maintain three main objects that map to =TTree= branches:
+
+- =RunInfo= :: meta information about the DAQ or simulation "run"
+- =Geom= :: static geometry information (wires)
+- =Image= :: reconstructed image of one readout or "frame"
+
+** Geom
+
+The =Geom= data is (for now) simply a vector of Wire geometry information.  
+
+** Image
+
+The Image data is dynamic in the sense that it spans a "frame" of readout.  It makes reference to the static Geom information.
+
+- =Deco= :: information about deconvoluted waveform information on a given wire in a time slice.
+
+- =Cell= :: geometry information about a 2D cell and its relationships with wire geometry.  Note, this collection of cells is shared through the time slices of the frame but not between frames.  These cells do not contain any charge or other "dynamic" information.
+
+- =Blob= :: an association between a collection of cells, a time slice and some numeric values (eg, charge)
+
+- =Field= :: a collection of =FieldPoint= objects each of which associate a vector of numbers and a 3D point.  Fields have human readable names.
