@@ -31,13 +31,19 @@ def configure(cfg):
 
     # JSONCPP
     cfg.check_cfg(package='jsoncpp', uselib_store='JSONCPP',
-                  args='--cflags --libs', mandatory=True)
-    cfg.check(header_name="json/json.h", use='JSONCPP', mandatory=True)
-    # fixme: make this optional.  It's just for apps/xdata-json
+                  args='--cflags --libs', mandatory=False)
+    cfg.check(header_name="json/json.h", use='JSONCPP', mandatory=False)
+
 
 
 
 def build(bld):
     bld.load('smplpkgs')
-    bld.smplpkg('WireCellXdataRoot', use='ROOTSYS', app_use='JSONCPP')
+    bld.smplpkg('WireCellXdataRoot', use='ROOTSYS')
     
+    if 'HAVE_JSONCPP' in bld.env:
+        app = bld.path.find_resource("opts/xdata-json.cxx")
+        bld.program(source = [app], 
+                    target = app.name.replace('.cxx',''),
+                    includes = 'inc',
+                    use = [APPNAME, 'ROOTSYS','JSONCPP'])
