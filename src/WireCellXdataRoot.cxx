@@ -5,7 +5,6 @@
 #include "WireCellXdataRoot/Wire.h"
 #include "WireCellXdataRoot/Deco.h"
 #include "WireCellXdataRoot/Geom.h"
-#include "WireCellXdataRoot/Cell.h"
 #include "WireCellXdataRoot/Blob.h"
 #include "WireCellXdataRoot/Field.h"
 #include "WireCellXdataRoot/Locus.h"
@@ -62,25 +61,6 @@ Deco::Deco()
 }
 
 
-Cell::Cell() 
-    : ident(0)
-    , uind(0)
-    , vind(0)
-    , wind(0)
-    , area(-1)
-    , center()
-{
-}
-
-Cell::Cell(uint32_t ident, uint32_t uind, uint32_t vind, uint32_t wind)
-    : ident(ident)
-    , uind(uind)
-    , vind(vind)
-    , wind(wind)
-    , area(-1)
-    , center() 
-{
-}
 
 Blob::Blob()
     : slice(0)

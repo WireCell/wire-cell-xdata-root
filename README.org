@@ -87,3 +87,5 @@ $ ls -lh ../*.root
 - include celltree level information MC (for now shunt TMC in 2dtoy-shower3d-xdata)
 - produce Xdata to Bee conversion (Chao)
 - add reader/writer nodes to the Wire Cell Toolkit
+- make =xdata-json= optional in the build
+

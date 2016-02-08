@@ -146,10 +146,7 @@ int main(int argc, char* argv[])
     for (int ind=0; ind<ncells; ++ind) {
 	auto xcell = ximg.get_cell(ind);
 	Json::Value jcell;
-	jcell["ident"] = xcell->ident;
-	jcell["uind"] = xcell->uind;
-	jcell["vind"] = xcell->vind;
-	jcell["wind"] = xcell->wind;
+	jcell["ident"] = (Json::UInt64)xcell->ident;
 	jcell["area"] = xcell->area;
 	jcell["center"] = Jpoint(xcell->center);
 	jcells.append(jcell);

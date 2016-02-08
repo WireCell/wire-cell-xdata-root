@@ -31,8 +31,8 @@ Wire* Lookup::operator()(Deco* deco)
 
 std::vector<Wire*> Lookup::operator()(Cell* cell)
 {
-    return std::vector<Wire*>{wire(cell->uind),
-	    wire(cell->vind), wire(cell->wind)};
+    auto up = cell->unpacked();
+    return std::vector<Wire*>{wire(up[0]), wire(up[1]), wire(up[2])};
 }
 
 std::vector<Cell*> Lookup::operator()(Blob* blob)

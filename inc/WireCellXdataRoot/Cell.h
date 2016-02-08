@@ -2,22 +2,38 @@
 #define WIRECELLXDATAROOT_CELL
 
 #include "WireCellXdataRoot/Point.h"
-#include <cstdint>
 
 #include "TObject.h"
+
+#include <vector>
+#include <cstdint>
+
+
 
 namespace WireCellXdataRoot {
 
     /// The geometrical information about a cell and its association with bounding wires.
     struct Cell : public TObject {
 	Cell();
-	Cell(uint32_t ident, uint32_t uind, uint32_t vind, uint32_t wind);
+	Cell(uint64_t ident);
+	Cell(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context=0);
+	void set(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context=0);
 
-	/// External, unique identifier.
-	uint32_t ident;
+	/// Cell ID packed as: [context|uind|vind|wind].
+	uint64_t ident;
 
-	/// Index into Geom::wires for of U, V and W wires associated with this cell.
-	uint32_t uind, vind, wind;
+	/// Indices into Geom::wires for of U, V and W wires
+	/// associated with this cell as well as the context for those
+	/// wires.
+	uint16_t uind();
+	uint16_t vind();
+	uint16_t wind();
+	uint16_t context();
+
+	std::vector<uint16_t> unpacked();
+
+	// Fixme: the following values are redundant with knowing the
+	// associated wires and the tiling algorithm.
 
 	/// Cross-sectional area of cell in the drift direction.
 	float area;
@@ -26,6 +42,14 @@ namespace WireCellXdataRoot {
 	Point center;
 
 	ClassDef(Cell, 1);
+
+	static 
+	uint64_t ident_pack(uint16_t uind, uint16_t vind, uint16_t wind,
+			    uint16_t context=0);
+	static
+	std::vector<uint16_t> ident_unpack(uint64_t ident);
+
+
     };
 
 }

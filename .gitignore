@@ -4,3 +4,9 @@ build
 install
 .lock-waf*
 *.root
+README.html
+junk
+old
+*.bz2
+*.gz
+*.root

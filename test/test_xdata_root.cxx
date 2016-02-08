@@ -44,14 +44,10 @@ void test_write(const std::string& filename)
 	for (int vind = 0; vind<10; ++vind) {
 	    for (int wind = 0; wind<10; ++wind) {
 		//img.cells.push_back(new Cell(uind*10000 + vind*100 + wind,uind,vind,wind));
-		int ident = uind*10000 + vind*100 + wind;
 		int ind = -1;
 		Cell* cell = img.new_cell(ind);
-		cell->ident = ident;
-		cell->uind = uind;
-		cell->vind = vind;
-		cell->wind = wind;
-		cell_id2ind[ident] = ind;
+		cell->ident = Cell::ident_pack(uind,vind,wind,ri.ident);
+		cell_id2ind[cell->ident] = ind;
 		allcells->cellind.push_back(ind);
 	    }
 	}
