@@ -4,6 +4,8 @@
 
 #pragma link C++ namespace WireCellXdataRoot;
 #pragma link C++ class WireCellXdataRoot::Point;
+#pragma link C++ class WireCellXdataRoot::Ray;
+#pragma link C++ class std::vector<WireCellXdataRoot::Ray>;
 #pragma link C++ class WireCellXdataRoot::Wire;
 #pragma link C++ class WireCellXdataRoot::Geom;
 #pragma link C++ class WireCellXdataRoot::Deco;

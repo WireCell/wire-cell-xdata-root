@@ -81,14 +81,9 @@ $ ls -lh ../*.root
 
 ** Work to do
 
-bugs:
-- [ ] deco in shower3d needs indexing by time slice as well as wire id
-
-features:
-- [ ] add wire parameters to Geom
-- [ ] remove Cell and just store a packing =context|UwireID|VwireID|WwireID=, add cell maker as alg in Xdata
-
-- [ ] validate shower3D conversion
-- [ ] include celltree level information MC (for now shunt TMC in 2dtoy-shower3d-xdata)
-- [ ] produce Xdata to Bee conversion (Chao)
-- [ ] add reader/writer nodes to the Wire Cell Toolkit
+- maybe remove Cell and just store a packing =context|UwireID|VwireID|WwireID=, add cell maker as alg in Xdata
+-  move away from =std::vector= in favor of =TClonesArray= to gain I/O speed.
+- validate shower3D conversion
+- include celltree level information MC (for now shunt TMC in 2dtoy-shower3d-xdata)
+- produce Xdata to Bee conversion (Chao)
+- add reader/writer nodes to the Wire Cell Toolkit

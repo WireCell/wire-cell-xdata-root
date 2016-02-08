@@ -2,7 +2,7 @@
 #define WIRECELLXDATAROOT_POINT
 
 #include <cstdint>
-
+#include <map>
 
 namespace WireCellXdataRoot {
 
@@ -14,6 +14,7 @@ namespace WireCellXdataRoot {
         float x, y, z;
     };
 
+    typedef std::pair<Point,Point> Ray;
 }
 
 #endif
