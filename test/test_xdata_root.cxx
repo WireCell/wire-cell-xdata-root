@@ -14,7 +14,7 @@ void test_write(const std::string& filename)
 	
     RunInfo& ri = out.runinfo();
     ri.detector = "bogusdet";
-    ri.ident = 0;
+    ri.ident = 42;
 
     Geom& geom = out.geom();
     for (int plane = 1; plane <=3; ++plane) {
@@ -64,6 +64,7 @@ void test_read(const std::string& filename)
     in.read(filename);
 
     assert(in.runinfo().detector != "");
+    assert(in.runinfo().ident == 42);
     assert(in.geom().wires.size() == 300);
 
 }

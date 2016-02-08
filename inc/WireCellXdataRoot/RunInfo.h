@@ -8,7 +8,7 @@ namespace WireCellXdataRoot {
 
     /// Information about one contiguous period of DAQ/Sim running.
     struct RunInfo {
-	RunInfo(uint64_t ident=-1, const char* detector="");
+	RunInfo(uint64_t ident=0, const char* detector="");
 
 	/// A canonical name for the associated detector.
 	std::string detector;

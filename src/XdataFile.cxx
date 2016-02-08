@@ -68,12 +68,14 @@ size_t XdataFile::read(const std::string& url)
 
 size_t XdataFile::write(const std::string& filename) {
     TFile* tfile = TFile::Open(filename.c_str(), "RECREATE");
+    tfile->cd();
 
-    TTree* tree = new TTree(m_treename.c_str(), "Wire Cell Exchange Data Imaging");
+    TTree* tree = new TTree(m_treename.c_str(),
+			    "Wire Cell Exchange Data Imaging");
 
-    tree->Branch("runinfo", m_runinfo);
-    tree->Branch("geom", m_geom);
-    tree->Branch("image", m_image);
+    tree->Branch("runinfo", &m_runinfo);
+    tree->Branch("geom", &m_geom);
+    tree->Branch("image", &m_image);
 
     size_t ret = tree->Fill();
 

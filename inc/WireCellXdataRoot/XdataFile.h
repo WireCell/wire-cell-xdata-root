@@ -27,6 +27,10 @@ namespace WireCellXdataRoot {
 	std::size_t write(const std::string& filename);
 
 	/// Access data for reading or writing
+	///
+	/// Be cautious with "auto", it does a copy!
+	/// auto g = xdata.geom();  // don't do this
+	/// Geom& g = xdata.gome(); // instead, do this
 	RunInfo& runinfo();
 	Geom& geom();
 	Image& image();
