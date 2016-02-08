@@ -130,7 +130,7 @@ Field::Field(const std::string& name)
 
 
 
-RunInfo::RunInfo(uint64_t ident, const std::string& detector)
+RunInfo::RunInfo(uint64_t ident, const char* detector)
     : detector(detector), ident(ident)
 {
 }

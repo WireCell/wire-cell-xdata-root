@@ -8,10 +8,8 @@
 using namespace std;
 using namespace WireCellXdataRoot;
 
-int main()
+void test_write(const std::string& filename)
 {
-    const string filename = "test_xdata.root";
-
     XdataFile out;
 	
     RunInfo& ri = out.runinfo();
@@ -56,12 +54,25 @@ int main()
     cerr << "Writing " << filename << endl;
     out.write(filename);
     assert(out.geom().wires.size() == 300);
+}
+
+void test_read(const std::string& filename)
+{
 
     XdataFile in;
     cerr << "Reading back " << filename << endl;
     in.read(filename);
 
+    assert(in.runinfo().detector != "");
     assert(in.geom().wires.size() == 300);
+
+}
+int main()
+{
+
+    const string filename = "test_xdata.root";
+    test_write(filename);
+    test_read(filename);
 
     return 0;
 }

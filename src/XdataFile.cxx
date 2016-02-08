@@ -4,6 +4,7 @@
 #include "TTree.h"
 
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 using namespace WireCellXdataRoot;
@@ -54,6 +55,9 @@ size_t XdataFile::read(const std::string& url)
 	throw runtime_error(msg.c_str());
     }
 
+    int nentries = tree->GetEntries();
+    //cerr << "Reading " << nentries << " from: " << url << "\n";
+    assert(nentries > 0);
     size_t ret = tree->GetEntry(0);
 
     tfile->Close();
@@ -67,12 +71,15 @@ size_t XdataFile::write(const std::string& filename) {
 
     TTree* tree = new TTree(m_treename.c_str(), "Wire Cell Exchange Data Imaging");
 
-    tree->Branch("runinfo", &m_runinfo);
-    tree->Branch("geom", &m_geom);
-    tree->Branch("image", &m_image);
+    tree->Branch("runinfo", m_runinfo);
+    tree->Branch("geom", m_geom);
+    tree->Branch("image", m_image);
 
     size_t ret = tree->Fill();
+
     tree->Write("", TObject::kOverwrite);
+    //tree->Write();    
+
     tfile->Close();
     delete tfile;
     return ret;
