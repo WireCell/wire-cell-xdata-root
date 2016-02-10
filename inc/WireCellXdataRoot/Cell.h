@@ -1,6 +1,7 @@
 #ifndef WIRECELLXDATAROOT_CELL
 #define WIRECELLXDATAROOT_CELL
 
+#include "WireCellXdataRoot/Types.h"
 #include "WireCellXdataRoot/Point.h"
 
 #include "TObject.h"
@@ -12,28 +13,39 @@
 
 namespace WireCellXdataRoot {
 
+    cellid_t cell_ident_pack(wireid_t uid, wireid_t vid, wireid_t wid,
+			     tilingid_t tiling=0);
+
+    std::vector<uint16_t> cell_ident_unpack(cellid_t ident);
+
+
+
     /// The geometrical information about a cell and its association with bounding wires.
     struct Cell : public TObject {
 	Cell();
-	Cell(uint64_t ident);
-	Cell(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context=0);
-	void set(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context=0);
+	Cell(cellid_t ident);
+	Cell(wireid_t uid, wireid_t vid, wireid_t wid, tilingid_t tilingid=0);
+	void set(wireid_t uid, wireid_t vid, wireid_t wid, tilingid_t tilingid=0);
 
-	/// Cell ID packed as: [context|uind|vind|wind].
-	uint64_t ident;
+	/// Cell ID packed as: [tilingid|uid|vid|wid].
+	cellid_t ident;
 
-	/// Indices into Geom::wires for of U, V and W wires
-	/// associated with this cell as well as the context for those
-	/// wires.
-	uint16_t uind();
-	uint16_t vind();
-	uint16_t wind();
-	uint16_t context();
+	/// The wire IDs of the associated wire from each plane. 
+	wireid_t uid();
+	wireid_t vid();
+	wireid_t wid();
 
-	std::vector<uint16_t> unpacked();
+	/// The tiling is mostly to fill in the remaining two bytes
+	/// with something but can be used to indicate which tiling
+	/// was used to create the cell in order to account for
+	/// differing cells which might otherwise share the same wire
+	/// triplet.
+	tilingid_t tiling();
 
-	// Fixme: the following values are redundant with knowing the
-	// associated wires and the tiling algorithm.
+	std::vector<wireid_t> wireids();
+
+	// Fixme: the following values are redundant but mildly costly
+	// to recalculate.
 
 	/// Cross-sectional area of cell in the drift direction.
 	float area;
@@ -41,14 +53,9 @@ namespace WireCellXdataRoot {
 	/// Center point of cell projected to APA origin in drift direction.
 	Point center;
 
+	std::vector<uint16_t> unpacked();
+
 	ClassDef(Cell, 1);
-
-	static 
-	uint64_t ident_pack(uint16_t uind, uint16_t vind, uint16_t wind,
-			    uint16_t context=0);
-	static
-	std::vector<uint16_t> ident_unpack(uint64_t ident);
-
 
     };
 

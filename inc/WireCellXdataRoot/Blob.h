@@ -1,28 +1,32 @@
 #ifndef WIRECELLXDATAROOT_BLOB
 #define WIRECELLXDATAROOT_BLOB
 
-#include <cstdint>
+#include "WireCellXdataRoot/Types.h"
+
 #include <vector>
 
 #include "TObject.h"
 
 namespace WireCellXdataRoot {
 
-    /// A collection of cells associated with a time slice and a number of values.
+    /// A collection of cells associated with a time slice and a
+    /// number of values.  A blob exists in the context of an overall
+    /// image.
     struct Blob : public TObject {
-	Blob();
 
-	/// External, unique identifier.
-	uint32_t ident;
+	Blob(blobid_t ident=0, int slice=0, float charge = 0.0);
+
+	/// Identifier for this blob unique to the image.
+	blobid_t ident;
 
 	// the time slice
-	int slice;		
+	slice_t slice;		
 
-	/// Indices into cell or blob collection.
-	std::vector<std::size_t> cellind;
+	/// Charge in blob
+	float charge;
 
-	/// Any values to associate to the blob
-	std::vector<float> values;
+	/// The cells in this blob
+	std::vector<cellid_t> cellids;
 
 	ClassDef(Blob, 1);
     };

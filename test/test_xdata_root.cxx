@@ -1,5 +1,8 @@
-#include "WireCellXdataRoot/XdataFile.h"
-#include "WireCellXdataRoot/Lookup.h"
+#include "WireCellXdataRoot/Writer.h"
+#include "WireCellXdataRoot/CloneHelper.h"
+#include "WireCellXdataRoot/Wire.h"
+#include "WireCellXdataRoot/Cell.h"
+#include "WireCellXdataRoot/RunInfo.h"
 
 #include <string>
 #include <iostream>
@@ -11,104 +14,110 @@ using namespace WireCellXdataRoot;
 
 void test_write(const std::string& filename)
 {
-    XdataFile out;
+    Writer xwriter(filename.c_str());
 	
-    RunInfo& ri = out.runinfo();
-    ri.detector = "bogusdet";
-    ri.ident = 42;
+    Geom& geom = xwriter.geom.obj();
+    CloneHelper<Wire> wireca(*geom.wires);
+    CloneHelper<Cell> cellca(*geom.cells);
 
-    Geom& geom = out.geom();
-    for (int plane = 1; plane <=3; ++plane) {
-	for (int ind = 0; ind<100; ++ind) {
-	    Wire* wire = new Wire;
-	    wire->chanid = wire->wireid = plane*1000+ind+1;
-	    wire->volid=1;
-	    wire->plane=plane;
+    geom.ident=1;
+    geom.description = "bogus detector from test_xdata_root";
+
+    std::vector<Wire*> uvw_wires[3];
+    int uvw_nwires[3] = {200,100,100};
+
+    for (int iplane = 0; iplane < 3; ++iplane) {
+	for (int ind = 0; ind<uvw_nwires[iplane]; ++ind) {
+	    Wire* wire = wireca.make();
+	    wire->chanid = wire->ident = (iplane+1)*1000+ind+1; // make up some convention
+	    wire->apaid=1;
+	    wire->plane=iplane;
 	    wire->offset=ind;
 	    wire->segment=0;
 	    //wire->point1 = ...;
 	    //wire->point2 = ...;
-	    geom.wires.push_back(wire);
+
+	    // cache by plane
+	    uvw_wires[iplane].push_back(wire);
 	}
     }
-    cerr << "Number of wires: " << geom.wires.size() << endl;
+    cerr << "Number of wires: " << wireca.size() << endl;
 
-    Image& img = out.image();
-    int blobind = -1;
-    Blob* allcells = img.new_blob(blobind);
-    allcells->ident = 42;
-    allcells->slice = 99;
-    /// fill up some bogus cells
     map<int,int> cell_id2ind;
-    for (int uind = 0; uind<10; ++uind) {
-	for (int vind = 0; vind<10; ++vind) {
-	    for (int wind = 0; wind<10; ++wind) {
-		//img.cells.push_back(new Cell(uind*10000 + vind*100 + wind,uind,vind,wind));
-		int ind = -1;
-		Cell* cell = img.new_cell(ind);
-		cell->ident = Cell::ident_pack(uind,vind,wind,ri.ident);
-		cell_id2ind[cell->ident] = ind;
-		allcells->cellind.push_back(ind);
+    for (auto uwire : uvw_wires[0]) {
+	for (auto vwire : uvw_wires[1]) {
+	    for (auto wwire : uvw_wires[2]) {
+		Cell* cell = cellca.make();
+		cell->set(uwire->ident, vwire->ident, wwire->ident);
+		// cell->area=...;
+		// cell->center=...;
 	    }
 	}
     }
+    cerr << "Number of cells: " << cellca.size() << endl;
 
-    cerr << "Writing " << filename << endl;
-    out.write(filename);
-    assert(out.geom().wires.size() == 300);
+    xwriter.geom.fill();
+
+    RunInfo& ri = xwriter.runinfo.obj();
+    ri.ident = 42;
+    ri.geomid = geom.ident;
+    xwriter.runinfo.fill();
+
+    // writer closes as it leaves scope and destructs>
 }
 
-void test_read(const std::string& filename)
-{
+// void test_read(const std::string& filename)
+// {
 
-    XdataFile in;
-    cerr << "Reading back " << filename << endl;
-    in.read(filename);
+//     XdataFile in;
+//     cerr << "Reading back " << filename << endl;
+//     in.read(filename);
 
-    assert(in.runinfo().detector != "");
-    assert(in.runinfo().ident == 42);
-    assert(in.geom().wires.size() == 300);
+//     assert(in.runinfo().detector != "");
+//     assert(in.runinfo().ident == 42);
+//     assert(in.geom().wires.size() == 300);
 
-    auto &geom = in.geom();
-    auto &img = in.image();
+//     auto &geom = in.geom();
+//     auto &img = in.image();
 
-    Lookup lu(geom, img);
+//     Lookup lu(geom, img);
 
-    int nblobs = img.num_blobs();
-    cerr << nblobs << " blobs:\n";
-    for (int iblob=0; iblob<nblobs; ++iblob) {
-	auto blob = img.get_blob(iblob);
-	cerr << "\tblob id:" << blob->ident << " @ " << blob->slice
-	     << " [";
-	string comma = "";
-	for (auto v : blob->values) {
-	    cerr << comma << v;
-	    comma = ", ";
-	}
-	cerr << "] " << blob->cellind.size() << " cells:\n";
-	for (auto cell : lu(blob)) {
-	    cerr <<"\t\tcell id:" << cell->ident << " A=" << cell->area
-		 << " @ "
-		 << cell->center.x << " "
-		 << cell->center.y << " "
-		 << cell->center.z << " wires:\n";
-	    for (auto wire : lu(cell)) {
-	    	cerr << "\t\t\twire id: " << wire->wireid
-	    	     << " plane=" << (int) wire->plane
-	    	     << " chan=" << wire->chanid
-	    	     << " vol=" << wire->volid << "\n";
-	    }
-	}
-    }
+//     int nblobs = img.num_blobs();
+//     cerr << nblobs << " blobs:\n";
+//     for (int iblob=0; iblob<nblobs; ++iblob) {
+// 	auto blob = img.get_blob(iblob);
+// 	cerr << "\tblob id:" << blob->ident << " @ " << blob->slice
+// 	     << " [";
+// 	string comma = "";
+// 	for (auto v : blob->values) {
+// 	    cerr << comma << v;
+// 	    comma = ", ";
+// 	}
+// 	cerr << "] " << blob->cellind.size() << " cells:\n";
+// 	for (auto cell : lu(blob)) {
+// 	    cerr <<"\t\tcell id:" << cell->ident << " A=" << cell->area
+// 		 << " @ "
+// 		 << cell->center.x << " "
+// 		 << cell->center.y << " "
+// 		 << cell->center.z << " wires:\n";
+// 	    for (auto wire : lu(cell)) {
+// 	    	cerr << "\t\t\twire id: " << wire->wireid
+// 	    	     << " plane=" << (int) wire->plane
+// 	    	     << " chan=" << wire->chanid
+// 	    	     << " vol=" << wire->volid << "\n";
+// 	    }
+// 	}
+//     }
 
 
-}
+// }
+
 int main()
 {
 
     const string filename = "test_xdata.root";
     test_write(filename);
-    test_read(filename);
+//    test_read(filename);
 
     return 0;
 }

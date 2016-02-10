@@ -1,0 +1,33 @@
+digraph Xdata {
+	geom[shape=box];
+	runinfo[shape=box];
+	trigger[shape=box];
+	frame[shape=box];
+	field[shape=box];
+	image[shape=box];
+	
+	blobs[shape=doublecircle];
+	decos[shape=doublecircle];
+	points[shape=doublecircle,label="field\npoints"];
+	wires[shape=doublecircle];
+	cells[shape=doublecircle];
+
+
+	geom->wires[arrowtail=diamond,dir=back];
+	geom->cells[arrowtail=diamond,dir=back];
+	image->blobs[arrowtail=diamond,dir=back];
+	blobs->blob[arrowtail=diamond,dir=back];
+	wires->wire[arrowtail=diamond,dir=back];
+	frame->decos[arrowtail=diamond,dir=back];
+	field->points[arrowtail=diamond,dir=back];
+
+	runinfo->geom[weight=0,style=dotted];
+	trigger->runinfo[weight=0,style=dotted];
+	frame->trigger[weight=0,style=dotted];
+	image->frame[weight=0,style=dotted];
+	field->trigger[weight=0,style=dotted];
+
+	blob->cells[arrowtail=diamond,dir=back,style=dashed,weight=0];
+	cells->wire[arrowtail=diamond,dir=back,style=dashed,weight=0];
+
+}

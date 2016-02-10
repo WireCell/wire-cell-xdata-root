@@ -2,6 +2,9 @@
 
 using namespace WireCellXdataRoot;
 
+
+
+
 Cell::Cell() 
     : ident(0)
     , area(-1)
@@ -9,29 +12,30 @@ Cell::Cell()
 {
 }
 
-Cell::Cell(uint64_t ident)
+Cell::Cell(cellid_t ident)
     : ident(ident)
     , area(-1)
     , center() 
 {
 }
-Cell::Cell(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context)
-    : ident(ident)
+Cell::Cell(wireid_t uid, wireid_t vid, wireid_t wid, tilingid_t tilingid)
+    : ident(0)
     , area(-1)
     , center() 
 {
+    set(uid, vid, wid, tilingid);
 }
-void Cell::set(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context)
+void Cell::set(wireid_t uid, wireid_t vid, wireid_t wid, tilingid_t tilingid)
 {
-    ident = Cell::ident_pack(uind, vind, wind, context);
+    ident = cell_ident_pack(uid, vid, wid, tilingid);
 }
 
-uint64_t Cell::ident_pack(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t context)
+uint64_t WireCellXdataRoot::cell_ident_pack(uint16_t uid, uint16_t vid, uint16_t wid, uint16_t tilingid)
 {
-    uint64_t u = uind;
-    uint64_t v = vind;
-    uint64_t w = wind;
-    uint64_t c = context;
+    uint64_t u = uid;
+    uint64_t v = vid;
+    uint64_t w = wid;
+    uint64_t c = tilingid;
     
     uint64_t pc = (0xffff&c)<<48;
     uint64_t pu = (0xffff&u)<<32;
@@ -40,7 +44,7 @@ uint64_t Cell::ident_pack(uint16_t uind, uint16_t vind, uint16_t wind, uint16_t 
 
     return pc | pu | pv | pw;
 }
-std::vector<uint16_t> Cell::ident_unpack(uint64_t ident)
+std::vector<uint16_t> WireCellXdataRoot::cell_ident_unpack(uint64_t ident)
 {
     uint16_t c = (ident>>48)&0xffff;
     uint16_t u = (ident>>32)&0xffff;
@@ -50,23 +54,23 @@ std::vector<uint16_t> Cell::ident_unpack(uint64_t ident)
     return std::vector<uint16_t>{u,v,w,c};
 }
 
-uint16_t Cell::uind()
+uint16_t Cell::uid()
 {
-    Cell::ident_unpack(ident)[0];
+    return cell_ident_unpack(ident)[0];
 }
-uint16_t Cell::vind()
+uint16_t Cell::vid()
 {
-    Cell::ident_unpack(ident)[1];
+    return cell_ident_unpack(ident)[1];
 }
-uint16_t Cell::wind()
+uint16_t Cell::wid()
 {
-    Cell::ident_unpack(ident)[2];
+    return cell_ident_unpack(ident)[2];
 }
-uint16_t Cell::context()
+uint16_t Cell::tiling()
 {
-    Cell::ident_unpack(ident)[3];
+    return cell_ident_unpack(ident)[3];
 }
 std::vector<uint16_t> Cell::unpacked()
 {
-    return Cell::ident_unpack(ident);
+    return cell_ident_unpack(ident);
 }

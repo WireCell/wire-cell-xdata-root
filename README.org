@@ -1,6 +1,6 @@
 #+TITLE: Wire Cell Exchange Data in ROOT format
 
-This package provides data structures for exchanging data in ROOT format between Wire Cell and other systems.
+This package provides data structures and helpers for exchanging data in ROOT format between Wire Cell and other systems.
 
 This package is independent from Wire Cell Toolkit (and Prototype).
 
@@ -27,27 +27,43 @@ t.b.d.
 
 * Overview of data
 
-Top level object is =XdataFile= which helps maintain three main objects that map to =TTree= branches:
+** CAVEAT
 
-- =RunInfo= :: meta information about the DAQ or simulation "run"
-- =Geom= :: static geometry information (wires)
-- =Image= :: reconstructed image of one readout or "frame"
+The data model that Xdata follows is driven by the requirements for efficient ROOT I/O.  It is not necessarily intended to provide convent patterns for use in algorithm development.  Users of this package are expected to convert Xdata into some format suited to their problem.  Please do *not* use Xdata in anything other than converters.
 
-** Geom
+** Identifiers
 
-The =Geom= data is (for now) simply a vector of Wire geometry information.  
+References from one object to another in Xdata is done through an identifying number ("ID" or "ident" in places).  The ID number of a particular object must be unique among all objects of that class up to some context.  An ID can, but need not be, an index into a collection.  In some cases, such as Cell ID, there are requirements on how they are formed.
 
-** Image
+** Dependencies
 
-The Image data is dynamic in the sense that it spans a "frame" of readout.  It makes reference to the static Geom information.
+A dependency graph between the Xdata objects is shown in the following graph:
 
-- =Deco= :: information about deconvoluted waveform information on a given wire in a time slice.
+[[./doc/deps.png]]
 
-- =Cell= :: geometry information about a 2D cell and its relationships with wire geometry.  Note, this collection of cells is shared through the time slices of the frame but not between frames.  These cells do not contain any charge or other "dynamic" information.
+The legend:
 
-- =Blob= :: an association between a collection of cells, a time slice and some numeric values (eg, charge)
+- box :: classes used to define top-level ROOT =TTree= branches
+- circle :: ROOT =TClonesArray= of the named data type
+- ellipse :: simple struct
+- solid diamond :: aggregation through ownership
+- dashed diamond :: referencing through ID
 
-- =Field= :: a collection of =FieldPoint= objects each of which associate a vector of numbers and a 3D point.  Fields have human readable names.
+** Trees
+
+The boxes in the above figure indicate the classes used to define top-level branches of their own ROOT trees.
+
+- geom :: A =Geom= object provides spatial context for other data.  It directly provides information about parameters describing wires planes, the set of wires (ID and physical endpoints) associated with those parameters and the cells generated from the wires.  It is possible for multiple =Geom= objects to exist in the file.
+- runinfo :: A =RunInfo= object provides meta data about a contiguous running of the DAQ or MC.  A run has exactly one associated =Geom= and multiple runs may associate to the same geom.
+- trigger :: The trigger provides a temporal context so any time information in other objects is w.r.t. it.  Multiple triggers are associated with a particular runinfo.
+- frame :: A frame contains a collection of "deocs", objects which contain information about the deconvolved charge from the channels all at a given time slice.  The time slices are integral bins measured with respect to the trigger time.
+- image :: an image contains a number of /blobs/.  Each blob associates a number of cells and a time slice with an amount of reconstructed charge.  An image references the frame from which the decos were used in collecting the blobs.  To accommodate different algorithms, multiple images may reference the same frame.  An image need not collect all possible activity and thus can be used identify some subset (or "cluster") of blobs.
+
+* Reading
+
+Because Xdata objects are all simple structs, Xdata ROOT files can be read with no special software (beyond ROOT).  
+However, by first linking the dictionaries provided by this package one can avoid warnings.
+This package also provides some helper utilities that make reading easier.
 
 * Status
 
@@ -80,6 +96,10 @@ $ ls -lh ../*.root
 #+END_EXAMPLE
 
 ** Work to do
+
+- move image =TClonesArray=s into own trees
+- add to headers references to entries
+
 
 - maybe remove Cell and just store a packing =context|UwireID|VwireID|WwireID=, add cell maker as alg in Xdata
 -  move away from =std::vector= in favor of =TClonesArray= to gain I/O speed.

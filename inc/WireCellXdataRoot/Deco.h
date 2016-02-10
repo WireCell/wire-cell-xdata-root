@@ -1,30 +1,32 @@
 #ifndef WIRECELLXDATAROOT_DECO
 #define WIRECELLXDATAROOT_DECO
 
-#include "WireCellXdataRoot/Point.h"
-
-#include <cstdint>
-#include <vector>
+#include "WireCellXdataRoot/Types.h"
 
 #include "TObject.h"
 
 namespace WireCellXdataRoot {
 
     /** A "deco" is information about the integrated charge from a
-     * deconvolved waveform from a wire over a time slice.
+     * deconvolved waveform from a channel over a time slice.
      */
     struct Deco : public TObject {
-	Deco();
 
-	/// Index into wire store of wire
-	uint32_t wireind;
+
+	Deco(chanid_t chanid=0, slice_t slice=-1,
+	     float charge=-1, float uncertainty=-1);
+
+	/// The identity of the wire to which this Deco is associated.
+	chanid_t chanid;
 
 	/// The time slice
-	int slice;		
+	slice_t slice;		
 
-	/// The information. 
-	std::vector<float> values;
-	// fixme: is float enough precision for charge/charge_err?
+	/// The charge value in the time slice
+	float charge;
+
+	/// Its uncertainty.
+	float uncertainty;
 
 	ClassDef(Deco,1);
     };
