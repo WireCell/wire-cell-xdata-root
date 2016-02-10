@@ -9,7 +9,7 @@ Trigger::Trigger(trigid_t ident,
 		 second_t second,
 		 nanosecond_t nanosecond)
     : ident(ident)
-    , trigger(type)
+    , type(type)
     , runid(runid)
     , second(second)
     , nanosecond(nanosecond)

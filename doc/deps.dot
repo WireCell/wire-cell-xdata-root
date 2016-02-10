@@ -21,11 +21,12 @@ digraph Xdata {
 	frame->decos[arrowtail=diamond,dir=back];
 	field->points[arrowtail=diamond,dir=back];
 
-	runinfo->geom[weight=0,style=dotted];
 	trigger->runinfo[weight=0,style=dotted];
 	frame->trigger[weight=0,style=dotted];
+	frame->geom[weight=0,style=dotted];
 	image->frame[weight=0,style=dotted];
 	field->trigger[weight=0,style=dotted];
+	field->geom[weight=0,style=dotted];
 
 	blob->cells[arrowtail=diamond,dir=back,style=dashed,weight=0];
 	cells->wire[arrowtail=diamond,dir=back,style=dashed,weight=0];

@@ -25,7 +25,7 @@ namespace WireCellXdataRoot {
 	trigid_t ident;
 	
 	/// The reason for raising this trigger
-	trigger_t trigger;
+	trigger_t type;
 
 	/// The associated run
 	runid_t runid;	      

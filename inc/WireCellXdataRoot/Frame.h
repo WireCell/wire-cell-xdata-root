@@ -16,6 +16,7 @@ namespace WireCellXdataRoot {
 
 	Frame(frameid_t ident=0,
 	      trigid_t trigid=0,
+	      geomid_t geomid=0,
 	      double toffset=0.0,     // in seconds
 	      double slicespan=2.0e-6 // in seconds
 	    );
@@ -26,6 +27,9 @@ namespace WireCellXdataRoot {
 
 	/// The identity of the associated trigger.
 	trigid_t trigid;
+
+	/// The identity of the associated geometry
+	geomid_t geomid;
 
 	/// A local offset in time (in seconds) from the absolute
 	/// frame start time to the origin of the slice numbering used

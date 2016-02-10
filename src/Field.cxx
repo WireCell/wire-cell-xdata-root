@@ -21,9 +21,10 @@ FieldPoint::FieldPoint(const Point& point, const std::vector<float>& value)
 {
 }
 
-Field::Field(fieldid_t ident, trigid_t trigid, const std::string& name)
+Field::Field(fieldid_t ident, trigid_t trigid, geomid_t geomid, const std::string& name)
     : ident(ident)
     , trigid(trigid)
+    , geomid(geomid)
     , name(name)
     , points(new TClonesArray("WireCellXdataRoot::FieldPoint"))
 {

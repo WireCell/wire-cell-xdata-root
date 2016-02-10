@@ -60,7 +60,6 @@ void test_write(const std::string& filename)
 
     RunInfo& ri = xwriter.runinfo.obj();
     ri.ident = 42;
-    ri.geomid = geom.ident;
     xwriter.runinfo.fill();
 
     // writer closes as it leaves scope and destructs>

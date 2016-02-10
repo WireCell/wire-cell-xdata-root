@@ -11,13 +11,11 @@
 #pragma link C++ class WireCellXdataRoot::Deco;
 #pragma link C++ class WireCellXdataRoot::Cell;
 #pragma link C++ class WireCellXdataRoot::Blob;
-#pragma link C++ class WireCellXdataRoot::Locus;
 #pragma link C++ class WireCellXdataRoot::FieldPoint;
 #pragma link C++ class WireCellXdataRoot::Field;
-#pragma link C++ class WireCellXdataRoot::WireStore;
+#pragma link C++ class WireCellXdataRoot::Frame;
+#pragma link C++ class WireCellXdataRoot::Trigger;
 #pragma link C++ class WireCellXdataRoot::Image;
 #pragma link C++ class WireCellXdataRoot::RunInfo;
-#pragma link C++ class WireCellXdataRoot::FrameInfo;
-#pragma link C++ class WireCellXdataRoot::XdataFile;
 
 

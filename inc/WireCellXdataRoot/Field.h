@@ -26,7 +26,10 @@ namespace WireCellXdataRoot {
     /** A field is a collection of field points with an associated name.
      */
     struct Field {
-	Field(fieldid_t ident=0, trigid_t trigid=0, const std::string& name = "");
+	Field(fieldid_t ident=0,
+	      trigid_t trigid=0,
+	      geomid_t geomid=0,
+	      const std::string& name = "");
 	~Field();
 
 	/// A unique identifier for this field.
@@ -34,6 +37,9 @@ namespace WireCellXdataRoot {
 
 	/// The associated trigger.
 	trigid_t trigid;
+
+	/// The associated geometry.
+	geomid_t geomid;
 
 	/// A human-readable description of the field 
 	std::string name;
