@@ -3,6 +3,8 @@
 
 #include "WireCellXdataRoot/Types.h"
 #include "WireCellXdataRoot/Point.h"
+#include "WireCellXdataRoot/Wire.h"
+#include "WireCellXdataRoot/Cell.h"
 
 #include <string>
 #include <vector>

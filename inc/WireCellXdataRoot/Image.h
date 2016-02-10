@@ -2,6 +2,7 @@
 #define WIRECELLXDATAROOT_IMAGE
 
 #include "WireCellXdataRoot/Types.h"
+#include "WireCellXdataRoot/Blob.h"
 
 class TClonesArray;
 

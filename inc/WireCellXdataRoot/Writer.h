@@ -47,7 +47,7 @@ namespace WireCellXdataRoot {
 
     class Writer {
 
-	TFile m_tfile;
+	TFile* m_tfile;
 
     public:
 
@@ -60,7 +60,7 @@ namespace WireCellXdataRoot {
 	TreeHelper<Image> image;
 
 	Writer(const std::string& filename)
-	    : m_tfile(filename.c_str(), "RECREATE") {
+	    : m_tfile(TFile::Open(filename.c_str(), "RECREATE")) {
 	    geom.init("geom","geom");
 	    runinfo.init("runinfo","runinfo");
 	    trigger.init("trig","trig");
@@ -68,7 +68,10 @@ namespace WireCellXdataRoot {
 	    frame.init("frame","frame");
 	    image.init("image","image");
 	}
-	~Writer() {
+	void close() {
+	    if (!m_tfile) {
+		return;
+	    }
 	    geom.write();
 	    runinfo.write();
 	    trigger.write();
@@ -76,7 +79,12 @@ namespace WireCellXdataRoot {
 	    frame.write();
 	    image.write();
 
-	    m_tfile.Close();
+	    m_tfile->Close();
+	    delete m_tfile; m_tfile = nullptr;
+	}
+
+	~Writer() {
+	    close();
 	}
 
     };

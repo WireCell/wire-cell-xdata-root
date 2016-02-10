@@ -2,6 +2,7 @@
 #define WIRECELLXDATAROOT_FRAME
 
 #include "WireCellXdataRoot/Types.h"
+#include "WireCellXdataRoot/Deco.h"
 
 class TClonesArray;
 
