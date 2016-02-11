@@ -60,11 +60,17 @@ The boxes in the above figure indicate the classes used to define top-level bran
 - image :: an image contains a number of /blobs/.  Each blob associates a number of cells and a time slice with an amount of reconstructed charge.  An image references the frame from which the decos were used in collecting the blobs.  To accommodate different algorithms, multiple images may reference the same frame.  An image need not collect all possible activity and thus can be used identify some subset (or "cluster") of blobs.
 - field :: a field zero or more values defined on Cartesian 3D points.  A field is both space (geom) and time (trigger) context.
 
-* Reading
+* Reading and Writing
 
 Because Xdata objects are all simple structs, Xdata ROOT files can be read with no special software (beyond ROOT).  
 However, by first linking the dictionaries provided by this package one can avoid warnings.
 This package also provides some helper utilities that make reading easier.
+
+The =WireCellXdataRoot::Reader= packages up the structure of the TFile with easy-to-use readers making use of =TTreeReader= mechanism.  See [[./test/test_xdata_root.cxx]] for example.
+
+The =WireCellXdataRoot::Writer= helps to make Xdata compliant ROOT files.  Again, see [[./test/test_xdata_root.cxx]] for example.
+
+
 
 * Status
 
