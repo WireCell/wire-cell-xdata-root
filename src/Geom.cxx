@@ -16,6 +16,8 @@ Geom::Geom(geomid_t ident, const std::string& description,
 }
 Geom::~Geom()
 {
-    delete cells; cells = 0;
-    delete wires; wires = 0;
+    delete cells;
+    cells = 0;
+    delete wires;
+    wires = 0;
 }    

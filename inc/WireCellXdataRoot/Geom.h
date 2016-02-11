@@ -55,6 +55,10 @@ namespace WireCellXdataRoot {
 	/// The Cell objects made from those wires
 	TClonesArray* cells;
 
+    private:
+	// no copy
+	Geom& operator=(const Geom& other) { Geom* g = nullptr; return *g; }
+	Geom(const Geom& other) { }
     };
 
 }

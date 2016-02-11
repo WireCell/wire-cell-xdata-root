@@ -1,8 +1,7 @@
 #include "WireCellXdataRoot/Writer.h"
+#include "WireCellXdataRoot/Reader.h"
 #include "WireCellXdataRoot/CloneHelper.h"
-#include "WireCellXdataRoot/Wire.h"
-#include "WireCellXdataRoot/Cell.h"
-#include "WireCellXdataRoot/RunInfo.h"
+#include "WireCellXdataRoot/WireDB.h"
 
 #include <string>
 #include <iostream>
@@ -20,7 +19,7 @@ void test_write(const std::string& filename)
     CloneHelper<Wire> wireca(*geom.wires);
     CloneHelper<Cell> cellca(*geom.cells);
 
-    geom.ident=1;
+    geom.ident=42;
     geom.description = "bogus detector from test_xdata_root";
 
     std::vector<Wire*> uvw_wires[3];
@@ -65,58 +64,77 @@ void test_write(const std::string& filename)
     // writer closes as it leaves scope and destructs>
 }
 
-// void test_read(const std::string& filename)
-// {
+void test_read(const std::string& url)
+{
+    // TFile* file = TFile::Open(url.c_str());
+    // assert(file);
+    // TTree* tree = dynamic_cast<TTree*>(file->Get("geom"));
+    // assert(tree);
+    // Geom* geom = new Geom;
+    // tree->SetBranchAddress("geom",&geom);
+    // tree->GetEntry(0);
+    // assert(geom->ident=42);
+    
 
-//     XdataFile in;
-//     cerr << "Reading back " << filename << endl;
-//     in.read(filename);
+    Reader xreader(url);
+    cerr << "Reading back " << url << endl;
 
-//     assert(in.runinfo().detector != "");
-//     assert(in.runinfo().ident == 42);
-//     assert(in.geom().wires.size() == 300);
+    while (xreader.runinfo_reader.Next()) {
+	RunInfo& ri = *xreader.runinfo;
+	cerr << "Run: " << ri.ident << endl;
+    }
+    WireDB wdb;
+    while (xreader.geom_reader.Next()) {
+	Geom& g = *xreader.geom;
+	assert (g.ident == 42);
+	CloneHelper<Wire> wireca(*g.wires);
+	CloneHelper<Cell> cellca(*g.cells);
+	cerr << "Geom: " << g.ident << " " << g.description
+	     << " #wires=" << wireca.size() << " #cells=" << cellca.size()
+	     << endl;
+	for (int ind=0; ind < wireca.size(); ++ind) {
+	    wdb(wireca.get(ind));
+	}
+    }
+    const Wire* wire1001 = wdb.by_chan(1001);
+    assert(wire1001->chanid == 1001);
+    assert(wire1001 = wdb.by_id(1001)); // test bogus chan convention used above
+    assert(wire1001->ident == 1001);
+    
 
-//     auto &geom = in.geom();
-//     auto &img = in.image();
+    while (xreader.trigger_reader.Next()) {
+	Trigger& t = *xreader.trigger;
+	cerr << "Trigger: " << t.ident << " type=" << t.type << " run=" << t.runid
+	     << " @ " << t.second << "s and " << t.nanosecond << "ns" <<endl;
+    }
+    while (xreader.frame_reader.Next()) {
+	Frame& f = *xreader.frame;
+	CloneHelper<Deco> decoca(*f.decos);
+	cerr << "Frame: " << f.ident << " trig=" << f.trigid << " geom=" << f.geomid
+	     << " #decos=" << decoca.size() << endl;
+    }
+    while (xreader.image_reader.Next()) {
+	Image& img = *xreader.image;
+	CloneHelper<Blob> blobca(*img.blobs);
+	cerr << "Image: " << img.ident << " frame=" << img.frameid
+	     << " #blobs=" << blobca.size() << endl;;
+    }
+    while (xreader.field_reader.Next()) {
+	Field& f = *xreader.field;
+	CloneHelper<FieldPoint> fieldca(*f.points);
+	cerr << "Field: " << f.ident << " " << f.name << " trig=" << f.trigid << " geom=" << f.geomid
+	     << " #points=" << fieldca.size() << endl;
+    }
+    
 
-//     Lookup lu(geom, img);
-
-//     int nblobs = img.num_blobs();
-//     cerr << nblobs << " blobs:\n";
-//     for (int iblob=0; iblob<nblobs; ++iblob) {
-// 	auto blob = img.get_blob(iblob);
-// 	cerr << "\tblob id:" << blob->ident << " @ " << blob->slice
-// 	     << " [";
-// 	string comma = "";
-// 	for (auto v : blob->values) {
-// 	    cerr << comma << v;
-// 	    comma = ", ";
-// 	}
-// 	cerr << "] " << blob->cellind.size() << " cells:\n";
-// 	for (auto cell : lu(blob)) {
-// 	    cerr <<"\t\tcell id:" << cell->ident << " A=" << cell->area
-// 		 << " @ "
-// 		 << cell->center.x << " "
-// 		 << cell->center.y << " "
-// 		 << cell->center.z << " wires:\n";
-// 	    for (auto wire : lu(cell)) {
-// 	    	cerr << "\t\t\twire id: " << wire->wireid
-// 	    	     << " plane=" << (int) wire->plane
-// 	    	     << " chan=" << wire->chanid
-// 	    	     << " vol=" << wire->volid << "\n";
-// 	    }
-// 	}
-//     }
-
-
-// }
+}
 
 int main()
 {
 
     const string filename = "test_xdata.root";
     test_write(filename);
-//    test_read(filename);
+    test_read(filename);
 
     return 0;
 }

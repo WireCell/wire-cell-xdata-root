@@ -12,6 +12,7 @@ namespace WireCellXdataRoot {
     public:
 	CloneHelper(TClonesArray& ca) : m_ca(ca) {}
 
+
 	/// Return current size of TClonesArray
 	int size() {
 	    return m_ca.GetEntriesFast(); 

@@ -14,11 +14,11 @@
 namespace WireCellXdataRoot {
 
     template<class Type>
-    class TreeHelper {
+    class TreeWriter {
 	TTree* m_tree;
 	Type* m_obj;
     public:
-	TreeHelper()
+	TreeWriter()
 	    : m_tree(0)
 	    , m_obj(new Type) {
 	}
@@ -27,7 +27,7 @@ namespace WireCellXdataRoot {
 	    m_tree = new TTree(tree.c_str(), tree.c_str());
 	    m_tree->Branch(branch.c_str(), &m_obj);
 	}
-	~TreeHelper() {
+	~TreeWriter() {
 	    // delete m_obj;
 	}
 
@@ -45,6 +45,12 @@ namespace WireCellXdataRoot {
     };
 
 
+    /**  A simple helper to write Xdata ROOT files.
+     *
+     *  Use the provided TreeHelper objects to set data on their
+     *  .obj() and then call the helper's .fill().  When done, call
+     *  the Writer's .close() or just delete the Writer.
+     */
     class Writer {
 
 	TFile* m_tfile;
@@ -52,12 +58,12 @@ namespace WireCellXdataRoot {
     public:
 
 	/// Give caller direct access
-	TreeHelper<Geom> geom;
-	TreeHelper<RunInfo> runinfo;
-	TreeHelper<Trigger> trigger;
-	TreeHelper<Field> field;
-	TreeHelper<Frame> frame;
-	TreeHelper<Image> image;
+	TreeWriter<Geom> geom;
+	TreeWriter<RunInfo> runinfo;
+	TreeWriter<Trigger> trigger;
+	TreeWriter<Field> field;
+	TreeWriter<Frame> frame;
+	TreeWriter<Image> image;
 
 	Writer(const std::string& filename)
 	    : m_tfile(TFile::Open(filename.c_str(), "RECREATE")) {
