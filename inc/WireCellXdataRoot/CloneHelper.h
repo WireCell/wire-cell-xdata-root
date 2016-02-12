@@ -26,10 +26,6 @@ namespace WireCellXdataRoot {
 	    ret->Clear();
 	    return ret;
 	}
-	void remove_last(){
-	  int index = size();
-	  m_ca.RemoveAt(index-1);
-	}
 
 	/// Return object at index in TClonesArray.
 	Type* get(int index) {
