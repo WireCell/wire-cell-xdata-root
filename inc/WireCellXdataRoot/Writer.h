@@ -65,7 +65,7 @@ namespace WireCellXdataRoot {
 	TreeWriter<Field> field;
 	TreeWriter<Frame> frame;
 	TreeWriter<Image> image;
-	TTree *TMC;
+	//TTree *TMC;
 
 	Writer(TFile* tfile) 
 	    : m_tfile(tfile)
@@ -88,11 +88,11 @@ namespace WireCellXdataRoot {
 	    field.init("field","field");
 	    frame.init("frame","frame");
 	    image.init("image","image");
-	    TMC = 0;
+	    //TMC = 0;
 	}
-	void set_tree_mc(TTree* tree){
-	  TMC = tree;
-	}
+	/* void set_tree_mc(TTree* tree){ */
+	/*   TMC = tree; */
+	/* } */
 	void close() {
 	    if (!m_tfile) {
 		return;
@@ -103,9 +103,9 @@ namespace WireCellXdataRoot {
 	    field.write();
 	    frame.write();
 	    image.write();
-	    if (TMC!=0){
-	      TMC->CloneTree()->Write();
-	    }
+	    /* if (TMC!=0){ */
+	    /*   TMC->CloneTree()->Write(); */
+	    /* } */
 
 	    if (m_owner) {
 		m_tfile->Close();
