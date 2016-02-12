@@ -7,6 +7,7 @@ install
 README.html
 junk
 old
+tmp
 *.bz2
 *.gz
 *.root

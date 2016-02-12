@@ -52,8 +52,8 @@ namespace WireCellXdataRoot {
 	    , runinfo_reader("runinfo",m_tfile)
 	    , runinfo(runinfo_reader, "runinfo")
 
-	    , trigger_reader("trigger",m_tfile)
-	    , trigger(trigger_reader, "trigger")
+	    , trigger_reader("trig",m_tfile)
+	    , trigger(trigger_reader, "trig")
 
 	    , field_reader("field",m_tfile)
 	    , field(field_reader, "field")
