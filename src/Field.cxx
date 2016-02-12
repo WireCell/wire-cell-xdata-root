@@ -21,6 +21,13 @@ FieldPoint::FieldPoint(const Point& point, const std::vector<float>& value)
 {
 }
 
+void FieldPoint::Clear(Option_t* opt)
+{
+    point = Point();
+    values.clear();
+}
+
+
 Field::Field(fieldid_t ident, trigid_t trigid, geomid_t geomid, const std::string& name)
     : ident(ident)
     , trigid(trigid)
@@ -34,3 +41,5 @@ Field::~Field()
 {
     delete points;
 }
+
+

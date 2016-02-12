@@ -34,7 +34,7 @@ namespace WireCellXdataRoot {
 
 	/// Pass on clear message to CA.
 	void clear() {
-	    m_ca.Clear();
+	    m_ca.Clear("C");
 	}
     };
 }

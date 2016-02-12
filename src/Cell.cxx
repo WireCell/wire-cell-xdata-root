@@ -74,3 +74,10 @@ std::vector<uint16_t> Cell::unpacked()
 {
     return cell_ident_unpack(ident);
 }
+
+void Cell::Clear(Option_t* opt)
+{
+    ident = 0;
+    area = -1;
+    center = Point();
+}

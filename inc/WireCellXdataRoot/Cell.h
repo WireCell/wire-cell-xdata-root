@@ -55,8 +55,10 @@ namespace WireCellXdataRoot {
 
 	std::vector<uint16_t> unpacked();
 
-	ClassDef(Cell, 1);
+	// Override TObject
+	virtual void Clear(Option_t* opt = "");
 
+	ClassDef(Cell, 1);
     };
 
 }

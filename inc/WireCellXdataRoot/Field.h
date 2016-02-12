@@ -20,6 +20,8 @@ namespace WireCellXdataRoot {
 	Point point;
 	std::vector<float> values;
 
+	virtual void Clear(Option_t* opt = "");
+
 	ClassDef(FieldPoint,1);
     };
 
@@ -44,6 +46,7 @@ namespace WireCellXdataRoot {
 	/// A human-readable description of the field 
 	std::string name;
 
+	/// array of FieldPoint
 	TClonesArray* points;
     };
 }

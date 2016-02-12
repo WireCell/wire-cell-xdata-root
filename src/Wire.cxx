@@ -21,3 +21,16 @@ Wire::Wire(wireid_t ident,
     , apaid(apaid)
 {
 }
+
+void Wire::Clear(Option_t* opt)
+{
+    ident=0;
+    chanid=0;
+    offset=0;
+    plane=0;
+    face=0;
+    segment=0;
+    point1 = Point();
+    point2 = Point();
+    apaid=0;
+}

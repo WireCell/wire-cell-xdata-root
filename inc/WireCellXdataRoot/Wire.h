@@ -67,8 +67,10 @@ namespace WireCellXdataRoot {
 	/// (replicated) then leave this as 0.
 	apaid_t apaid;
 
-	ClassDef(Wire, 1);
+	// Override TObject
+	virtual void Clear(Option_t* opt = "");
 
+	ClassDef(Wire, 1);
     };
 
 }

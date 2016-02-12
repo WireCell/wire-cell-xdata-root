@@ -8,3 +8,13 @@ Blob::Blob(blobid_t ident, int slice, float charge)
     , charge(charge)
 {
 }
+
+
+
+void Blob::Clear(Option_t* opt)
+{
+    ident = 0;
+    slice = 0;
+    charge = 0;
+    cellids.clear();
+}

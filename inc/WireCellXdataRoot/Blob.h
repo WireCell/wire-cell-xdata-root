@@ -28,6 +28,9 @@ namespace WireCellXdataRoot {
 	/// The cells in this blob
 	std::vector<cellid_t> cellids;
 
+	// Override TObject
+	virtual void Clear(Option_t* opt = "");
+
 	ClassDef(Blob, 1);
     };
 }

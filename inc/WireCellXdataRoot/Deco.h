@@ -28,6 +28,9 @@ namespace WireCellXdataRoot {
 	/// Its uncertainty.
 	float uncertainty;
 
+	// Override TObject
+	virtual void Clear(Option_t* opt = "");
+
 	ClassDef(Deco,1);
     };
 
