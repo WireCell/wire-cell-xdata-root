@@ -54,6 +54,7 @@ namespace WireCellXdataRoot {
     class Writer {
 
 	TFile* m_tfile;
+	bool m_owner;
 
     public:
 
@@ -66,8 +67,21 @@ namespace WireCellXdataRoot {
 	TreeWriter<Image> image;
 	TTree *TMC;
 
+	Writer(TFile* tfile) 
+	    : m_tfile(tfile)
+	    , m_owner(false)
+	{
+	    geom.init("geom","geom");
+	    runinfo.init("runinfo","runinfo");
+	    trigger.init("trig","trig");
+	    field.init("field","field");
+	    frame.init("frame","frame");
+	    image.init("image","image");
+	}
 	Writer(const std::string& filename)
-	    : m_tfile(TFile::Open(filename.c_str(), "RECREATE")) {
+	    : m_tfile(TFile::Open(filename.c_str(), "RECREATE"))
+	    , m_owner(true)
+	{
 	    geom.init("geom","geom");
 	    runinfo.init("runinfo","runinfo");
 	    trigger.init("trig","trig");
@@ -93,8 +107,11 @@ namespace WireCellXdataRoot {
 	      TMC->CloneTree()->Write();
 	    }
 
-	    m_tfile->Close();
-	    delete m_tfile; m_tfile = nullptr;
+	    if (m_owner) {
+		m_tfile->Close();
+		delete m_tfile;
+		m_tfile = nullptr;
+	    }
 	}
 
 	~Writer() {
