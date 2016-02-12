@@ -64,6 +64,7 @@ namespace WireCellXdataRoot {
 	TreeWriter<Field> field;
 	TreeWriter<Frame> frame;
 	TreeWriter<Image> image;
+	TTree *TMC;
 
 	Writer(const std::string& filename)
 	    : m_tfile(TFile::Open(filename.c_str(), "RECREATE")) {
@@ -73,6 +74,10 @@ namespace WireCellXdataRoot {
 	    field.init("field","field");
 	    frame.init("frame","frame");
 	    image.init("image","image");
+	    TMC = 0;
+	}
+	void set_tree_mc(TTree* tree){
+	  TMC = tree;
 	}
 	void close() {
 	    if (!m_tfile) {
@@ -84,6 +89,9 @@ namespace WireCellXdataRoot {
 	    field.write();
 	    frame.write();
 	    image.write();
+	    if (TMC!=0){
+	      TMC->CloneTree()->Write();
+	    }
 
 	    m_tfile->Close();
 	    delete m_tfile; m_tfile = nullptr;
