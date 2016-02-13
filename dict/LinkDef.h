@@ -2,6 +2,8 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
+#pragma link C++ class vector<vector<int> >;
+
 #pragma link C++ namespace WireCellXdataRoot;
 #pragma link C++ class WireCellXdataRoot::Point;
 #pragma link C++ class WireCellXdataRoot::Ray;
