@@ -66,8 +66,8 @@ void dump_3dpoints(ofstream& jsonFile, Reader& xreader, TString name)
         Field& f = *xreader.field;
         if (f.ident == nameMap[name.Data()]) {
             CloneHelper<FieldPoint> fieldca(*f.points);
-            cerr << "retreving: Field: " << f.ident << " (" << f.name << ") trig=" << f.trigid << " geom=" << f.geomid
-                << " #points=" << fieldca.size() << endl;
+            // cerr << "retreving: Field: " << f.ident << " (" << f.name << ") trig=" << f.trigid << " geom=" << f.geomid
+            //     << " #points=" << fieldca.size() << endl;
             int nPoints = fieldca.size();
             for (int i=0; i<nPoints; i++) {
                 FieldPoint *fp = fieldca.get(i);

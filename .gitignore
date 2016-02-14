@@ -6,8 +6,11 @@ install
 *.root
 README.html
 junk
+data
 old
 tmp
 *.bz2
 *.gz
 *.root
+*.zip
+

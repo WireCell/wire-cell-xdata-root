@@ -96,18 +96,18 @@ void MCReader::DumpMC()
 {
     TTree *t = (TTree*)rootFile->Get("TMC");
 
-    t->SetBranchAddress("mc_Ntrack"       , &mc_Ntrack);
-    t->SetBranchAddress("mc_id"           , &mc_id);
-    t->SetBranchAddress("mc_pdg"          , &mc_pdg);
-    t->SetBranchAddress("mc_process"      , &mc_process);
-    t->SetBranchAddress("mc_mother"       , &mc_mother);
-    t->SetBranchAddress("mc_daughters"    , &mc_daughters);
-    t->SetBranchAddress("mc_startXYZT"    , &mc_startXYZT);
-    t->SetBranchAddress("mc_endXYZT"      , &mc_endXYZT);
-    t->SetBranchAddress("mc_startMomentum", &mc_startMomentum);
-    t->SetBranchAddress("mc_endMomentum"  , &mc_endMomentum);
-
     if (t) {
+        t->SetBranchAddress("mc_Ntrack"       , &mc_Ntrack);
+        t->SetBranchAddress("mc_id"           , &mc_id);
+        t->SetBranchAddress("mc_pdg"          , &mc_pdg);
+        t->SetBranchAddress("mc_process"      , &mc_process);
+        t->SetBranchAddress("mc_mother"       , &mc_mother);
+        t->SetBranchAddress("mc_daughters"    , &mc_daughters);
+        t->SetBranchAddress("mc_startXYZT"    , &mc_startXYZT);
+        t->SetBranchAddress("mc_endXYZT"      , &mc_endXYZT);
+        t->SetBranchAddress("mc_startMomentum", &mc_startMomentum);
+        t->SetBranchAddress("mc_endMomentum"  , &mc_endMomentum);
+
         t->GetEntry(0);
         ProcessTracks();
         DumpMCJSON(jsonFile);
